@@ -1,1725 +1,769 @@
+```html
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Магическая Математическая Дуэль</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        body {
-            background: linear-gradient(135deg, #1a0b2e, #0d0521);
-            color: #f0f0ff;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            overflow-x: hidden;
-        }
-        
-        .container {
-            width: 100%;
-            max-width: 1200px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        
-        header {
-            text-align: center;
-            margin-bottom: 30px;
-            width: 100%;
-        }
-        
-        h1 {
-            font-size: 3rem;
-            margin-bottom: 10px;
-            background: linear-gradient(to right, #ff00cc, #3333ff);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            text-shadow: 0 0 15px rgba(255, 0, 204, 0.5);
-        }
-        
-        .subtitle {
-            font-size: 1.2rem;
-            opacity: 0.8;
-            margin-bottom: 20px;
-        }
-        
-        .game-info {
-            display: flex;
-            justify-content: space-between;
-            width: 100%;
-            margin-bottom: 20px;
-            padding: 15px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 15px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .wizard {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            flex: 1;
-            padding: 15px;
-        }
-        
-        .wizard-name {
-            font-size: 1.8rem;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-        
-        .wizard-1 .wizard-name {
-            color: #4d9fff;
-        }
-        
-        .wizard-2 .wizard-name {
-            color: #ff4d6d;
-        }
-        
-        .wizard-avatar {
-            width: 120px;
-            height: 180px;
-            margin-bottom: 15px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-            border-radius: 10px;
-            border: 3px solid;
-            background-color: rgba(0, 0, 0, 0.3);
-        }
-        
-        .wizard-1 .wizard-avatar {
-            border-color: #4d9fff;
-            transform: scaleX(1);
-        }
-        
-        .wizard-2 .wizard-avatar {
-            border-color: #ff4d6d;
-            transform: scaleX(-1);
-        }
-        
-        .wizard-image {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            image-rendering: pixelated;
-        }
-        
-        .health-bar-container {
-            width: 100%;
-            max-width: 300px;
-            height: 25px;
-            background-color: rgba(0, 0, 0, 0.3);
-            border-radius: 12px;
-            overflow: hidden;
-            margin-bottom: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        
-        .health-bar {
-            height: 100%;
-            border-radius: 12px;
-            transition: width 0.5s ease;
-        }
-        
-        .wizard-1 .health-bar {
-            background: linear-gradient(to right, #1a6dff, #4d9fff);
-        }
-        
-        .wizard-2 .health-bar {
-            background: linear-gradient(to right, #ff1a4d, #ff4d6d);
-        }
-        
-        .health-text {
-            font-size: 1.2rem;
-            margin-bottom: 10px;
-        }
-        
-        .level {
-            font-size: 1.1rem;
-            background: rgba(255, 255, 255, 0.1);
-            padding: 5px 15px;
-            border-radius: 20px;
-        }
-        
-        .game-area {
-            position: relative;
-            width: 100%;
-            height: 400px;
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 20px;
-            overflow: hidden;
-            margin-bottom: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-        }
-        
-        .math-problem {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(0, 0, 0, 0.9);
-            padding: 30px 50px;
-            border-radius: 20px;
-            text-align: center;
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            display: none;
-            z-index: 50;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
-        }
-        
-        .problem-text {
-            font-size: 3rem;
-            margin-bottom: 20px;
-            color: #fff;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-        }
-        
-        .answer-input {
-            font-size: 2.5rem;
-            width: 120px;
-            text-align: center;
-            background: rgba(255, 255, 255, 0.1);
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            color: white;
-            border-radius: 10px;
-            padding: 10px;
-            outline: none;
-        }
-        
-        .answer-input:focus {
-            border-color: #ff00cc;
-            box-shadow: 0 0 15px rgba(255, 0, 204, 0.5);
-        }
-        
-        .submit-btn {
-            background: linear-gradient(to right, #ff00cc, #3333ff);
-            color: white;
-            border: none;
-            padding: 12px 30px;
-            font-size: 1.3rem;
-            border-radius: 10px;
-            cursor: pointer;
-            margin-left: 15px;
-            transition: all 0.3s;
-        }
-        
-        .submit-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 5px 15px rgba(255, 0, 204, 0.5);
-        }
-        
-        .timer-container {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            z-index: 40;
-        }
-        
-        .hourglass {
-            width: 80px;
-            height: 120px;
-            position: relative;
-            margin-bottom: 10px;
-        }
-        
-        .hourglass-top {
-            width: 80px;
-            height: 60px;
-            background: rgba(255, 215, 0, 0.8);
-            border-radius: 40px 40px 0 0;
-            position: absolute;
-            top: 0;
-            overflow: hidden;
-        }
-        
-        .hourglass-bottom {
-            width: 80px;
-            height: 60px;
-            background: rgba(255, 215, 0, 0.3);
-            border-radius: 0 0 40px 40px;
-            position: absolute;
-            bottom: 0;
-            overflow: hidden;
-        }
-        
-        .hourglass-sand {
-            width: 80px;
-            height: 60px;
-            background: rgba(255, 215, 0, 0.9);
-            position: absolute;
-            bottom: 0;
-            border-radius: 0 0 40px 40px;
-            transition: height 1s linear;
-        }
-        
-        .timer-text {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #ffd700;
-        }
-        
-        .spell-buttons {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 20px;
-            width: 100%;
-            max-width: 900px;
-            margin-bottom: 30px;
-        }
-        
-        .spell-button {
-            background: rgba(255, 255, 255, 0.05);
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            border-radius: 15px;
-            padding: 20px 10px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(5px);
-        }
-        
-        .spell-button:hover {
-            transform: translateY(-5px);
-            background: rgba(255, 255, 255, 0.1);
-            border-color: rgba(255, 255, 255, 0.4);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-        }
-        
-        .spell-button.active {
-            transform: translateY(-5px);
-            background: rgba(255, 255, 255, 0.15);
-            border-color: #ffcc00;
-            box-shadow: 0 5px 15px rgba(255, 204, 0, 0.5);
-        }
-        
-        .spell-icon {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-        }
-        
-        .spell-name {
-            font-size: 1.1rem;
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-        
-        .spell-description {
-            font-size: 0.9rem;
-            opacity: 0.8;
-            text-align: center;
-        }
-        
-        .game-controls {
-            display: flex;
-            gap: 20px;
-            width: 100%;
-            max-width: 600px;
-            margin-bottom: 30px;
-        }
-        
-        .control-button {
-            flex: 1;
-            padding: 15px 20px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        #startBtn {
-            background: linear-gradient(to right, #00b09b, #96c93d);
-            color: white;
-        }
-        
-        #restartBtn {
-            background: linear-gradient(to right, #ff416c, #ff4b2b);
-            color: white;
-        }
-        
-        .mode-selector {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-        
-        .mode-button {
-            padding: 10px 20px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 8px;
-            color: white;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .mode-button.active {
-            background: rgba(106, 17, 203, 0.5);
-            border-color: #6a11cb;
-        }
-        
-        .log {
-            width: 100%;
-            max-width: 900px;
-            height: 150px;
-            background: rgba(0, 0, 0, 0.5);
-            border-radius: 10px;
-            padding: 15px;
-            overflow-y: auto;
-            margin-bottom: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .log-entry {
-            margin-bottom: 8px;
-            padding-bottom: 8px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .water-spell { color: #4d9fff; }
-        .fire-spell { color: #ff6b4d; }
-        .lightning-spell { color: #ffcc00; }
-        .earth-spell { color: #9dff4d; }
-        
-        .wizard-1-color { color: #4d9fff; }
-        .wizard-2-color { color: #ff4d6d; }
-        
-        .damage-info {
-            position: absolute;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.7);
-            padding: 10px 20px;
-            border-radius: 10px;
-            font-size: 1.2rem;
-            display: none;
-            z-index: 30;
-            border: 2px solid rgba(255, 255, 255, 0.2);
-        }
-        
-        /* Анимации заклинаний */
-        .water-wave {
-            position: absolute;
-            height: 100px;
-            width: 20px;
-            background: linear-gradient(to right, rgba(77, 159, 255, 0), rgba(77, 159, 255, 0.8));
-            border-radius: 50%;
-            top: 150px;
-            z-index: 5;
-            animation: waterWave 1.5s linear;
-        }
-        
-        @keyframes waterWave {
-            0% { left: 150px; width: 20px; opacity: 0.8; }
-            100% { left: 100%; width: 100px; opacity: 0; }
-        }
-        
-        .water-wave.right {
-            animation: waterWaveRight 1.5s linear;
-        }
-        
-        @keyframes waterWaveRight {
-            0% { right: 150px; width: 20px; opacity: 0.8; }
-            100% { right: 100%; width: 100px; opacity: 0; }
-        }
-        
-        .fireball {
-            position: absolute;
-            width: 40px;
-            height: 40px;
-            background: radial-gradient(circle, #ff9900, #ff3300);
-            border-radius: 50%;
-            top: 150px;
-            z-index: 5;
-            box-shadow: 0 0 20px #ff3300;
-        }
-        
-        .fireball.left {
-            animation: fireballFlyLeft 1s ease-in forwards;
-        }
-        
-        @keyframes fireballFlyLeft {
-            0% { left: 150px; transform: scale(1); }
-            100% { left: calc(100% - 150px); transform: scale(1.5); }
-        }
-        
-        .fireball.right {
-            animation: fireballFlyRight 1s ease-in forwards;
-        }
-        
-        @keyframes fireballFlyRight {
-            0% { right: 150px; transform: scale(1); }
-            100% { right: calc(100% - 150px); transform: scale(1.5); }
-        }
-        
-        .fire-explosion {
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            background: radial-gradient(circle, #ff9900, #ff3300);
-            border-radius: 50%;
-            animation: fireExplosion 1s ease-out forwards;
-        }
-        
-        @keyframes fireExplosion {
-            0% { transform: scale(1); opacity: 1; }
-            100% { transform: scale(0); opacity: 0; }
-        }
-        
-        /* ИСПРАВЛЕННАЯ Анимация молнии - яркая желто-золото-красная линия */
-        .lightning-bolt {
-            position: absolute;
-            top: 150px;
-            height: 8px;
-            border-radius: 4px;
-            z-index: 5;
-            filter: blur(1px);
-            background: linear-gradient(
-                90deg,
-                rgba(255, 255, 0, 0) 0%,
-                rgba(255, 255, 0, 1) 10%,
-                rgba(255, 215, 0, 1) 30%,
-                rgba(255, 165, 0, 1) 50%,
-                rgba(255, 69, 0, 1) 70%,
-                rgba(255, 0, 0, 0.7) 90%,
-                rgba(255, 0, 0, 0) 100%
-            );
-            box-shadow: 
-                0 0 20px 3px rgba(255, 255, 0, 0.8),
-                0 0 40px 6px rgba(255, 215, 0, 0.6),
-                0 0 60px 9px rgba(255, 69, 0, 0.4);
-        }
-        
-        .lightning-bolt.left {
-            left: 150px;
-            animation: lightningBoltLeft 0.8s ease-out forwards;
-        }
-        
-        @keyframes lightningBoltLeft {
-            0% { 
-                width: 0px; 
-                opacity: 1;
-                box-shadow: 
-                    0 0 20px 3px rgba(255, 255, 0, 0.8),
-                    0 0 40px 6px rgba(255, 215, 0, 0.6),
-                    0 0 60px 9px rgba(255, 69, 0, 0.4);
-            }
-            20% { 
-                width: 20%; 
-                opacity: 1;
-            }
-            40% { 
-                width: 40%; 
-                opacity: 0.9;
-            }
-            60% { 
-                width: 60%; 
-                opacity: 0.8;
-            }
-            80% { 
-                width: 80%; 
-                opacity: 0.6;
-            }
-            100% { 
-                width: calc(100% - 300px); 
-                opacity: 0;
-                box-shadow: 
-                    0 0 10px 2px rgba(255, 255, 0, 0.4),
-                    0 0 20px 4px rgba(255, 215, 0, 0.3),
-                    0 0 30px 6px rgba(255, 69, 0, 0.2);
-            }
-        }
-        
-        .lightning-bolt.right {
-            right: 150px;
-            animation: lightningBoltRight 0.8s ease-out forwards;
-        }
-        
-        @keyframes lightningBoltRight {
-            0% { 
-                width: 0px; 
-                opacity: 1;
-                box-shadow: 
-                    0 0 20px 3px rgba(255, 255, 0, 0.8),
-                    0 0 40px 6px rgba(255, 215, 0, 0.6),
-                    0 0 60px 9px rgba(255, 69, 0, 0.4);
-            }
-            20% { 
-                width: 20%; 
-                opacity: 1;
-            }
-            40% { 
-                width: 40%; 
-                opacity: 0.9;
-            }
-            60% { 
-                width: 60%; 
-                opacity: 0.8;
-            }
-            80% { 
-                width: 80%; 
-                opacity: 0.6;
-            }
-            100% { 
-                width: calc(100% - 300px); 
-                opacity: 0;
-                box-shadow: 
-                    0 0 10px 2px rgba(255, 255, 0, 0.4),
-                    0 0 20px 4px rgba(255, 215, 0, 0.3),
-                    0 0 30px 6px rgba(255, 69, 0, 0.2);
-            }
-        }
-        
-        .meteor {
-            position: absolute;
-            width: 60px;
-            height: 60px;
-            background: radial-gradient(circle, #ff3300, #993300);
-            border-radius: 50%;
-            top: -100px;
-            z-index: 5;
-            box-shadow: 0 0 30px #ff3300;
-        }
-        
-        .meteor.tail {
-            position: relative;
-        }
-        
-        .meteor.tail::after {
-            content: '';
-            position: absolute;
-            width: 100px;
-            height: 20px;
-            background: linear-gradient(to right, rgba(255, 100, 0, 0), #ff6600);
-            top: 40px;
-            left: -80px;
-            border-radius: 10px;
-        }
-        
-        .meteor.left {
-            animation: meteorFallLeft 1.2s ease-in forwards;
-        }
-        
-        @keyframes meteorFallLeft {
-            0% { left: calc(50% - 30px); top: -100px; transform: rotate(0deg); }
-            100% { left: calc(100% - 180px); top: 250px; transform: rotate(360deg); }
-        }
-        
-        .meteor.right {
-            animation: meteorFallRight 1.2s ease-in forwards;
-        }
-        
-        @keyframes meteorFallRight {
-            0% { right: calc(50% - 30px); top: -100px; transform: rotate(0deg); }
-            100% { right: calc(100% - 180px); top: 250px; transform: rotate(360deg); }
-        }
-        
-        .damage-effect {
-            position: absolute;
-            font-size: 2rem;
-            font-weight: bold;
-            animation: damageFloat 1s ease-out forwards;
-            z-index: 20;
-        }
-        
-        @keyframes damageFloat {
-            0% { opacity: 1; transform: translateY(0); }
-            100% { opacity: 0; transform: translateY(-50px); }
-        }
-        
-        .turn-indicator {
-            position: absolute;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 1.5rem;
-            background: rgba(0, 0, 0, 0.7);
-            padding: 10px 20px;
-            border-radius: 10px;
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            z-index: 30;
-        }
-        
-        .game-over {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 3rem;
-            font-weight: bold;
-            background: rgba(0, 0, 0, 0.9);
-            padding: 30px 60px;
-            border-radius: 20px;
-            border: 3px solid rgba(255, 255, 255, 0.3);
-            z-index: 100;
-            text-align: center;
-            display: none;
-        }
-        
-        .winner {
-            color: #ffcc00;
-            font-size: 3.5rem;
-            margin-bottom: 20px;
-        }
-        
-        /* Анимация тряски экрана */
-        @keyframes shake {
-            0%, 100% {transform: translateX(0);}
-            10%, 30%, 50%, 70%, 90% {transform: translateX(-10px);}
-            20%, 40%, 60%, 80% {transform: translateX(10px);}
-        }
-        
-        .shake {
-            animation: shake 0.5s;
-        }
-        
-        .miss-effect {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 3rem;
-            font-weight: bold;
-            color: #ff3333;
-            text-shadow: 0 0 10px rgba(255, 0, 0, 0.8);
-            z-index: 60;
-            animation: missAnimation 1.5s ease-out forwards;
-        }
-        
-        @keyframes missAnimation {
-            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
-            20% { opacity: 1; transform: translate(-50%, -50%) scale(1.2); }
-            80% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-            100% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
-        }
-        
-        @media (max-width: 900px) {
-            .spell-buttons {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
-            h1 {
-                font-size: 2.5rem;
-            }
-            
-            .problem-text {
-                font-size: 2rem;
-            }
-            
-            .answer-input {
-                font-size: 1.8rem;
-                width: 90px;
-            }
-            
-            .wizard-avatar {
-                width: 100px;
-                height: 150px;
-            }
-        }
-        
-        @media (max-width: 600px) {
-            .game-controls {
-                flex-direction: column;
-            }
-            
-            .wizard-avatar {
-                width: 80px;
-                height: 120px;
-            }
-            
-            .math-problem {
-                padding: 20px 30px;
-            }
-            
-            .wizard-name {
-                font-size: 1.4rem;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Дракон-Змейка: Небесная Викторина</title>
+<link href="https://cdn.jsdelivr.net/fontsource/css/press-start-2p@latest/cyrillic-400.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/fontsource/css/rubik@latest/cyrillic-400.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/fontsource/css/rubik@latest/cyrillic-700.css" rel="stylesheet">
+<style>
+:root{
+  --deep:#0b2540; --blue:#123a63; --blue2:#27548a; --sky:#7fc4ef;
+  --red:#d9453c; --red2:#e0504a; --gold:#e8c15a; --green:#3fa65c;
+  --cream:#f4e9d8; --ink:#071830;
+}
+*{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+html,body{height:100%; margin:0;}
+body{background:var(--deep); color:var(--cream); font-family:'Rubik',sans-serif; overflow:hidden;}
+.page{display:none; height:100dvh; flex-direction:column; overflow:auto;}
+.page.active{display:flex;}
+.page-title{font-family:'Press Start 2P'; font-size:15px; text-align:center; padding:18px 12px 6px; color:var(--cream); text-shadow:2px 2px 0 var(--red);}
+/* ---------- MENU ---------- */
+#page-menu{overflow:hidden;}
+.menu-top{
+  height:46vh; min-height:250px; position:relative; flex:none;
+  background:url('https://image.qwenlm.ai/public_source/58917787-1620-4b20-b8e4-2447c67fb59f/1ef56e08d-2499-4d32-9483-3c22e82a7e31.png') center/cover no-repeat;
+  display:flex; align-items:flex-end; justify-content:center;
+  border-bottom:4px solid var(--blue2);
+}
+.title-card{
+  margin:0 12px 14px; text-align:center; padding:14px 22px;
+  background:rgba(11,37,64,.78); border:3px solid var(--sky); border-radius:14px;
+  backdrop-filter:blur(2px);
+}
+.title-card h1{margin:0; font-family:'Press Start 2P'; font-size:clamp(17px,4.6vw,30px); color:var(--cream); text-shadow:3px 3px 0 var(--red);}
+.title-card .subtitle{margin-top:8px; font-family:'Press Start 2P'; font-size:clamp(8px,2vw,11px); color:var(--sky); letter-spacing:2px;}
+.menu-bottom{flex:1; overflow:auto; display:flex; flex-direction:column; align-items:center; gap:10px; padding:16px 14px 22px;}
+.rating-badge{font-family:'Press Start 2P'; font-size:10px; color:var(--gold); background:var(--blue); border:2px solid var(--gold); border-radius:999px; padding:8px 16px; margin-bottom:4px;}
+.btn{
+  font-family:'Press Start 2P'; font-size:12px; color:#fff; cursor:pointer;
+  width:min(430px,94%); padding:15px 12px; border-radius:12px;
+  background:linear-gradient(180deg,var(--red2),#c0392f);
+  border:2px solid var(--cream); border-bottom-width:5px;
+  transition:transform .08s, filter .15s; text-shadow:1px 1px 0 rgba(0,0,0,.4);
+}
+.btn:hover{filter:brightness(1.12);}
+.btn:active{transform:translateY(2px); border-bottom-width:2px;}
+.btn.alt{background:linear-gradient(180deg,var(--blue2),var(--blue)); border-color:var(--sky);}
+.btn.danger{background:linear-gradient(180deg,#5a2a2a,#3c1d1d); border-color:var(--red2);}
+.btn.small{width:auto; padding:12px 18px; font-size:11px;}
+/* ---------- COMMON PAGES ---------- */
+.bottom-bar{margin-top:auto; padding:16px; display:flex; justify-content:center;}
+.card-static{margin:26px auto; max-width:520px; background:var(--blue); border:3px solid var(--sky); border-radius:14px; padding:26px 20px; text-align:center; font-size:17px; line-height:1.6;}
+.cards{display:flex; flex-direction:column; gap:12px; padding:14px; max-width:640px; margin:0 auto; width:100%;}
+.level-card,.diff-card{
+  position:relative; background:var(--blue); border:2px solid var(--blue2); border-radius:12px;
+  padding:14px 46px 14px 14px; cursor:pointer; transition:border-color .15s, transform .1s;
+}
+.level-card:hover,.diff-card:hover{transform:translateY(-1px);}
+.level-card.selected,.diff-card.selected{border-color:var(--gold); box-shadow:0 0 0 2px rgba(232,193,90,.35);}
+.lc-name{font-weight:700; font-size:16px; color:var(--cream);}
+.lc-count{font-size:12px; color:var(--sky); margin-top:4px;}
+.diff-desc{font-size:13px; color:#bcd6ee; margin-top:6px; line-height:1.45;}
+.mini{
+  font-size:14px; width:38px; height:38px; border-radius:9px; cursor:pointer;
+  background:var(--blue2); color:#fff; border:2px solid var(--sky);
+}
+.mini.red{background:#7c2d2d; border-color:var(--red2);}
+.level-card .mini,.q-item .mini{position:absolute; right:10px; top:50%; transform:translateY(-50%);}
+/* ---------- UPLOAD ---------- */
+.form-card{background:var(--blue); border:2px solid var(--blue2); border-radius:12px; padding:14px; margin:0 14px 14px; max-width:640px; width:auto; align-self:center; width:min(640px,94%);}
+.form-card h3{margin:2px 0 10px; font-family:'Press Start 2P'; font-size:10px; color:var(--sky);}
+.form-card label{font-size:12px; color:var(--sky); display:block; margin:8px 0 4px;}
+.form-card input[type=text],.form-card textarea,.form-card select{
+  width:100%; padding:10px; border-radius:8px; border:2px solid var(--blue2);
+  background:var(--ink); color:var(--cream); font-family:'Rubik'; font-size:14px;
+}
+.form-card textarea{resize:vertical; min-height:52px;}
+.row{display:flex; gap:8px; align-items:center;}
+.row > *{flex:1;}
+.row .mini{flex:none;}
+.answers{display:flex; flex-direction:column; gap:8px;}
+.answer-row{display:flex; gap:8px; align-items:center;}
+.answer-row input[type=text]{flex:1;}
+.answer-row .radio{flex:none; display:flex; align-items:center; gap:4px; font-size:11px; color:var(--green); background:var(--ink); padding:8px 8px; border-radius:8px; border:2px solid var(--blue2); cursor:pointer;}
+.answer-row .radio input{accent-color:var(--green); margin:0;}
+.q-item{position:relative; background:var(--ink); border:2px solid var(--blue2); border-radius:9px; padding:10px 46px 10px 10px; margin-bottom:8px; font-size:13px;}
+.dim{color:#8fb3d9; font-size:13px; text-align:center; padding:8px;}
+/* ---------- HOWTO ---------- */
+.howto{max-width:640px; margin:0 auto; padding:10px 16px 0; width:100%;}
+.howto-dragon{width:min(300px,80%); display:block; margin:6px auto 14px; border:3px solid var(--blue2); border-radius:12px; background:#000;}
+.howto ul{line-height:1.6; font-size:14px; color:#dceaf7; padding-left:20px;}
+.howto li{margin-bottom:8px;}
+/* ---------- GAME ---------- */
+#page-game{overflow:hidden;}
+.game-top{flex:none; background:var(--deep); border-bottom:3px solid var(--blue2); padding:8px 12px 10px;}
+.hud-row{display:flex; gap:6px; align-items:center; flex-wrap:wrap;}
+.spacer{flex:1;}
+.badge{font-size:11px; font-weight:700; padding:5px 9px; border-radius:999px; background:var(--blue); border:1.5px solid var(--sky); color:var(--cream); white-space:nowrap;}
+.badge.blue{border-color:var(--sky); color:var(--sky);}
+.badge.gold{border-color:var(--gold); color:var(--gold);}
+.badge.red{border-color:var(--red2); color:#ffd9d6; background:#7c2d2d;}
+#questionText{margin-top:8px; font-weight:700; font-size:clamp(14px,2.6vw,18px); color:var(--cream); min-height:22px; line-height:1.35;}
+#timerWrap{margin-top:8px; height:10px; border-radius:999px; background:var(--ink); border:1.5px solid var(--blue2); overflow:hidden; display:none;}
+#timerBar{height:100%; width:100%; background:var(--green); transition:width .1s linear;}
+#fieldWrap{position:relative; flex:1; margin:10px; border:3px solid var(--blue2); border-radius:14px; overflow:hidden; background:#0d2a4c; touch-action:none;}
+#gameCanvas{position:absolute; inset:0; display:block;}
+.hint{flex:none; text-align:center; font-size:11px; color:var(--sky); padding:0 8px 10px;}
+.overlay{position:absolute; inset:0; display:flex; align-items:center; justify-content:center; background:rgba(7,24,44,.9); z-index:5;}
+.overlay.hidden{display:none;}
+.overlay-card{text-align:center; padding:26px 22px; max-width:86%;}
+.overlay-card h2{font-family:'Press Start 2P'; font-size:clamp(14px,3.4vw,22px); color:var(--gold); margin:0 0 14px; text-shadow:2px 2px 0 var(--red);}
+.overlay-card p{font-size:15px; line-height:1.7; color:var(--cream); margin:0 0 20px;}
+.ov-btns{display:flex; gap:10px; justify-content:center; flex-wrap:wrap;}
+#toast{
+  position:fixed; top:14px; left:50%; transform:translateX(-50%) translateY(-70px);
+  background:var(--blue2); color:#fff; padding:10px 18px; border-radius:999px;
+  font-weight:700; font-size:14px; z-index:99; transition:transform .25s; pointer-events:none;
+  border:2px solid var(--sky);
+}
+#toast.show{transform:translateX(-50%) translateY(0);}
+</style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>Магическая Математическая Дуэль</h1>
-            <p class="subtitle">Решайте математические задачи, чтобы атаковать противника заклинаниями</p>
-        </header>
-        
-        <div class="mode-selector">
-            <div class="mode-button active" id="pvpMode">Игрок vs Игрок</div>
-            <div class="mode-button" id="pveMode">Игрок vs Компьютер</div>
-        </div>
-        
-        <div class="game-info">
-            <div class="wizard wizard-1">
-                <div class="wizard-name" id="wizard1Name">Гендальф</div>
-                <div class="wizard-avatar">
-                    <div class="wizard-placeholder" style="color: #4d9fff; font-size: 3rem; display: flex; align-items: center; justify-content: center; height: 100%;">🧙‍♂️</div>
-                </div>
-                <div class="health-text">Здоровье: <span id="wizard1Health">100</span>/100</div>
-                <div class="health-bar-container">
-                    <div class="health-bar" id="wizard1HealthBar" style="width: 100%;"></div>
-                </div>
-                <div class="level">Уровень: 1</div>
-            </div>
-            
-            <div class="wizard wizard-2">
-                <div class="wizard-name" id="wizard2Name">Саруман</div>
-                <div class="wizard-avatar">
-                    <div class="wizard-placeholder" style="color: #ff4d6d; font-size: 3rem; display: flex; align-items: center; justify-content: center; height: 100%;">🧙‍♂️</div>
-                </div>
-                <div class="health-text">Здоровье: <span id="wizard2Health">100</span>/100</div>
-                <div class="health-bar-container">
-                    <div class="health-bar" id="wizard2HealthBar" style="width: 100%;"></div>
-                </div>
-                <div class="level">Уровень: 1</div>
-            </div>
-        </div>
-        
-        <div class="game-area" id="gameArea">
-            <div class="turn-indicator" id="turnIndicator">Ход: <span class="wizard-1-color">Гендальф</span></div>
-            <div class="damage-info" id="damageInfo">Сила атаки: <span id="damageValue">10</span> ед.</div>
-            
-            <div class="math-problem" id="mathProblem">
-                <div class="problem-text" id="problemText">5 + 3 = ?</div>
-                <div>
-                    <input type="number" class="answer-input" id="answerInput" placeholder="Ответ">
-                    <button class="submit-btn" id="submitBtn">Ответить</button>
-                </div>
-            </div>
-            
-            <div class="timer-container" id="timerContainer">
-                <div class="hourglass">
-                    <div class="hourglass-top"></div>
-                    <div class="hourglass-bottom">
-                        <div class="hourglass-sand" id="hourglassSand" style="height: 0px;"></div>
-                    </div>
-                </div>
-                <div class="timer-text" id="timerText">20 сек</div>
-            </div>
-            
-            <div class="game-over" id="gameOver">
-                <div class="winner" id="winnerText"></div>
-                <p>Дуэль завершена!</p>
-            </div>
-        </div>
-        
-        <div class="spell-buttons">
-            <div class="spell-button" id="spellWater">
-                <div class="spell-icon">💧</div>
-                <div class="spell-name">Водяной поток</div>
-                <div class="spell-description">Сложение (+)</div>
-            </div>
-            
-            <div class="spell-button" id="spellFire">
-                <div class="spell-icon">🔥</div>
-                <div class="spell-name">Огненный шар</div>
-                <div class="spell-description">Вычитание (-)</div>
-            </div>
-            
-            <div class="spell-button" id="spellLightning">
-                <div class="spell-icon">⚡</div>
-                <div class="spell-name">Удар молнии</div>
-                <div class="spell-description">Деление (÷)</div>
-            </div>
-            
-            <div class="spell-button" id="spellEarth">
-                <div class="spell-icon">⛰️</div>
-                <div class="spell-name">Падение метеорита</div>
-                <div class="spell-description">Умножение (×)</div>
-            </div>
-        </div>
-        
-        <div class="game-controls">
-            <button class="control-button" id="startBtn">Начать дуэль</button>
-            <button class="control-button" id="restartBtn">Начать заново</button>
-        </div>
-        
-        <div class="log" id="gameLog">
-            <div class="log-entry">Добро пожаловать на магическую математическую дуэль! Выберите режим игры и нажмите "Начать дуэль".</div>
-        </div>
+
+<!-- ================= МЕНЮ ================= -->
+<section id="page-menu" class="page active">
+  <div class="menu-top">
+    <div class="title-card">
+      <h1>ДРАКОН-ЗМЕЙКА</h1>
+      <div class="subtitle">НЕБЕСНАЯ ВИКТОРИНА</div>
     </div>
+  </div>
+  <div class="menu-bottom">
+    <div class="rating-badge">⭐ РЕЙТИНГ: <span id="menuRating">0</span></div>
+    <button class="btn" id="btnStart">Начать</button>
+    <button class="btn alt" id="btnLevels">Выбрать уровень</button>
+    <button class="btn alt" id="btnDiff">Сложность</button>
+    <button class="btn alt" id="btnUpload">Загрузить свои материалы</button>
+    <button class="btn alt" id="btnHow">Как играть</button>
+    <button class="btn alt" id="btnCreators">Создатели</button>
+    <button class="btn danger" id="btnExit">Выход</button>
+  </div>
+</section>
 
-    <script>
-        // Игровые переменные
-        let gameState = {
-            wizard1: {
-                name: "Гендальф",
-                health: 100,
-                maxHealth: 100,
-                level: 1
-            },
-            wizard2: {
-                name: "Саруман",
-                health: 100,
-                maxHealth: 100,
-                level: 1
-            },
-            currentPlayer: 1,
-            gameActive: false,
-            gameMode: "pvp",
-            selectedSpell: null,
-            currentProblem: null,
-            currentAnswer: null,
-            timer: 20,
-            timerInterval: null,
-            baseDamage: 10,
-            currentDamage: 10,
-            damageReductionPerSecond: 0.5,
-            targetPlayer: 2,
-            // ИЗМЕНЕНО: Добавлены новые события с равной вероятностью (по 14.285% каждое)
-            computerActions: [
-                { type: 'miss', probability: 1/7, text: 'промахнулся' },
-                { type: 'full', probability: 1/7, text: 'нанес полный урон' },
-                { type: 'minus10', probability: 1/7, text: 'нанес урон на 10% меньше' },
-                { type: 'minus20', probability: 1/7, text: 'нанес урон на 20% меньше' },
-                { type: 'minus30', probability: 1/7, text: 'нанес урон на 30% меньше' },
-                { type: 'plus10', probability: 1/7, text: 'нанес урон на 10% больше' }, // НОВОЕ
-                { type: 'plus20', probability: 1/7, text: 'нанес урон на 20% больше' }  // НОВОЕ
-            ]
-        };
+<!-- ================= ИГРА ================= -->
+<section id="page-game" class="page">
+  <div class="game-top">
+    <div class="hud-row">
+      <span class="badge" id="hudDiff"></span>
+      <span class="badge blue" id="hudLevel"></span>
+      <span class="badge gold" id="qNum"></span>
+      <span class="badge red" id="hudScore">Очки: 0</span>
+      <span class="spacer"></span>
+      <button class="mini" id="btnPause">⏸</button>
+      <button class="mini" id="btnToMenu">✕</button>
+    </div>
+    <div id="questionText"></div>
+    <div id="timerWrap"><div id="timerBar"></div></div>
+  </div>
+  <div id="fieldWrap">
+    <canvas id="gameCanvas"></canvas>
+    <div id="overlay" class="overlay hidden">
+      <div class="overlay-card">
+        <h2 id="ovTitle"></h2>
+        <p id="ovText"></p>
+        <div class="ov-btns">
+          <button class="btn small" id="btnAgain">Играть снова</button>
+          <button class="btn small alt" id="btnMenu">В меню</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="hint">Управление: стрелки / WASD — на компьютере, свайпы пальцем — на телефоне</div>
+</section>
 
-        // DOM элементы
-        const wizard1HealthEl = document.getElementById('wizard1Health');
-        const wizard1HealthBarEl = document.getElementById('wizard1HealthBar');
-        const wizard2HealthEl = document.getElementById('wizard2Health');
-        const wizard2HealthBarEl = document.getElementById('wizard2HealthBar');
-        const turnIndicatorEl = document.getElementById('turnIndicator');
-        const gameLogEl = document.getElementById('gameLog');
-        const gameOverEl = document.getElementById('gameOver');
-        const winnerTextEl = document.getElementById('winnerText');
-        const startBtn = document.getElementById('startBtn');
-        const restartBtn = document.getElementById('restartBtn');
-        const pvpModeBtn = document.getElementById('pvpMode');
-        const pveModeBtn = document.getElementById('pveMode');
-        const mathProblemEl = document.getElementById('mathProblem');
-        const problemTextEl = document.getElementById('problemText');
-        const answerInputEl = document.getElementById('answerInput');
-        const submitBtn = document.getElementById('submitBtn');
-        const timerTextEl = document.getElementById('timerText');
-        const hourglassSandEl = document.getElementById('hourglassSand');
-        const damageInfoEl = document.getElementById('damageInfo');
-        const damageValueEl = document.getElementById('damageValue');
-        const gameAreaEl = document.getElementById('gameArea');
-        const timerContainerEl = document.getElementById('timerContainer');
-        
-        // Элементы заклинаний
-        const spellButtons = document.querySelectorAll('.spell-button');
-        const spellWaterBtn = document.getElementById('spellWater');
-        const spellFireBtn = document.getElementById('spellFire');
-        const spellLightningBtn = document.getElementById('spellLightning');
-        const spellEarthBtn = document.getElementById('spellEarth');
+<!-- ================= УРОВНИ ================= -->
+<section id="page-levels" class="page">
+  <h2 class="page-title">Выбор уровня</h2>
+  <div id="levelsList" class="cards"></div>
+  <div class="bottom-bar"><button class="btn alt small" data-back>Назад</button></div>
+</section>
 
-        // Функция для создания изображения волшебника
-        function createWizardImage() {
-            const canvas = document.createElement('canvas');
-            const ctx = canvas.getContext('2d');
-            canvas.width = 100;
-            canvas.height = 150;
-            
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
-            // Рисуем тело волшебника (плащ)
-            ctx.fillStyle = '#4d9fff';
-            ctx.beginPath();
-            ctx.ellipse(50, 90, 30, 50, 0, 0, Math.PI * 2);
-            ctx.fill();
-            
-            // Рисуем голову
-            ctx.fillStyle = '#ffd8b1';
-            ctx.beginPath();
-            ctx.arc(50, 40, 20, 0, Math.PI * 2);
-            ctx.fill();
-            
-            // Рисуем глаза
-            ctx.fillStyle = '#000';
-            ctx.beginPath();
-            ctx.arc(40, 35, 3, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.beginPath();
-            ctx.arc(60, 35, 3, 0, Math.PI * 2);
-            ctx.fill();
-            
-            // Рисуем рот
-            ctx.strokeStyle = '#000';
-            ctx.lineWidth = 2;
-            ctx.beginPath();
-            ctx.arc(50, 45, 8, 0, Math.PI);
-            ctx.stroke();
-            
-            // Рисуем шляпу
-            ctx.fillStyle = '#333';
-            ctx.beginPath();
-            ctx.ellipse(50, 25, 25, 15, 0, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.fillRect(45, 25, 10, 30);
-            
-            // Рисуем посох
-            ctx.fillStyle = '#8B4513';
-            ctx.fillRect(80, 20, 8, 100);
-            
-            // Рисуем кристалл на посохе
-            ctx.fillStyle = '#ffcc00';
-            ctx.beginPath();
-            ctx.arc(84, 20, 10, 0, Math.PI * 2);
-            ctx.fill();
-            
-            // Добавляем свечение кристалла
-            ctx.shadowColor = '#ffcc00';
-            ctx.shadowBlur = 10;
-            ctx.fill();
-            ctx.shadowBlur = 0;
-            
-            return canvas.toDataURL();
+<!-- ================= СЛОЖНОСТЬ ================= -->
+<section id="page-difficulty" class="page">
+  <h2 class="page-title">Сложность</h2>
+  <div id="diffList" class="cards"></div>
+  <div class="bottom-bar"><button class="btn alt small" data-back>Назад</button></div>
+</section>
+
+<!-- ================= МАТЕРИАЛЫ ================= -->
+<section id="page-upload" class="page">
+  <h2 class="page-title">Свои материалы</h2>
+  <div class="form-card">
+    <h3>УРОВЕНЬ</h3>
+    <select id="matLevel"></select>
+    <div class="row" style="margin-top:10px;">
+      <input type="text" id="newLevelName" placeholder="Название нового уровня…">
+      <button class="btn small alt" id="btnCreateLevel" style="width:auto;">Создать уровень</button>
+    </div>
+  </div>
+  <div class="form-card">
+    <h3>НОВЫЙ ВОПРОС</h3>
+    <label>Текст вопроса</label>
+    <textarea id="inpQuestion" placeholder="Введите вопрос…"></textarea>
+    <label>Варианты ответов (отметьте верный)</label>
+    <div class="answers">
+      <div class="answer-row"><input type="text" id="inpA0" placeholder="Ответ 1"><label class="radio"><input type="radio" name="correct" value="0" checked>верный</label></div>
+      <div class="answer-row"><input type="text" id="inpA1" placeholder="Ответ 2"><label class="radio"><input type="radio" name="correct" value="1">верный</label></div>
+      <div class="answer-row"><input type="text" id="inpA2" placeholder="Ответ 3"><label class="radio"><input type="radio" name="correct" value="2">верный</label></div>
+      <div class="answer-row"><input type="text" id="inpA3" placeholder="Ответ 4"><label class="radio"><input type="radio" name="correct" value="3">верный</label></div>
+    </div>
+    <div style="margin-top:12px; text-align:center;">
+      <button class="btn small" id="btnSaveQuestion">Сохранить вопрос в уровень</button>
+    </div>
+  </div>
+  <div class="form-card">
+    <h3>ВОПРОСЫ В УРОВНЕ</h3>
+    <div id="matQuestions"></div>
+  </div>
+  <div class="bottom-bar"><button class="btn alt small" data-back>Назад</button></div>
+</section>
+
+<!-- ================= КАК ИГРАТЬ ================= -->
+<section id="page-howto" class="page">
+  <h2 class="page-title">Как играть</h2>
+  <div class="howto">
+    <img class="howto-dragon" src="https://image.qwenlm.ai/public_source/58917787-1620-4b20-b8e4-2447c67fb59f/182c2f779-613a-44ea-8a4d-69d5c8cf80ea.png" alt="Дракон">
+    <ul>
+      <li>Управляйте летающим драконом: стрелки / WASD на компьютере, свайпы пальцем на телефоне.</li>
+      <li>В верхней части экрана отображается вопрос, а на поле — 4 яблока разных цветов с вариантами ответов.</li>
+      <li>Наведите голову дракона на яблоко — челюсти раскроются, и дракон съест его.</li>
+      <li>Верный ответ: +10 очков и новое звено тела дракона.</li>
+      <li>Ошибочный ответ: в глазах появляются крестики, дракон останавливается и теряет одно звено.</li>
+      <li>Посед каждого яблока вопрос меняется на следующий — соберите максимум верных ответов!</li>
+      <li>«Лёгкий»: время не ограничено, дракон проходит сквозь края и себя.</li>
+      <li>«Средний»: время не ограничено, но столкновения заканчивают игру.</li>
+      <li>«Тяжёлый»: 15 секунд на ответ и опасные столкновения.</li>
+    </ul>
+  </div>
+  <div class="bottom-bar"><button class="btn alt small" data-back>Назад</button></div>
+</section>
+
+<!-- ================= СОЗДАТЕЛИ ================= -->
+<section id="page-creators" class="page">
+  <h2 class="page-title">Создатели</h2>
+  <div class="card-static">Игра разработана Зубцом Антоном Жельковичем при&nbsp;поддержке нейросетей</div>
+  <div class="bottom-bar"><button class="btn alt small" data-back>Назад</button></div>
+</section>
+
+<!-- ================= ВЫХОД ================= -->
+<section id="page-exit" class="page">
+  <h2 class="page-title">Игра завершена</h2>
+  <div class="card-static">Спасибо за игру! 🐉<br><small style="color:var(--sky)">Если вкладка не закрылась автоматически — закройте её вручную.</small></div>
+  <div class="bottom-bar"><button class="btn alt small" data-back>Вернуться в меню</button></div>
+</section>
+
+<div id="toast"></div>
+
+<script>
+'use strict';
+/* ============ HELPERS ============ */
+const $=s=>document.querySelector(s);
+const store={
+  get(k,d){try{const v=localStorage.getItem(k);return v!==null?JSON.parse(v):d;}catch(e){return d;}},
+  set(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
+};
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));const t=a[i];a[i]=a[j];a[j]=t;}return a;}
+const lerp=(a,b,t)=>a+(b-a)*t;
+function escapeHtml(s){return s.replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));}
+function roundRect(g,x,y,w,h,r){g.beginPath();g.moveTo(x+r,y);g.arcTo(x+w,y,x+w,y+h,r);g.arcTo(x+w,y+h,x,y+h,r);g.arcTo(x,y+h,x,y,r);g.arcTo(x,y,x+w,y,r);g.closePath();}
+function wrapText(text,max){const words=String(text).split(' ');const lines=[];let cur='';for(const w of words){const test=cur?cur+' '+w:w;if(test.length>max&&cur){lines.push(cur);cur=w;}else cur=test;}if(cur)lines.push(cur);return lines.slice(0,2);}
+let toastTimer=0;
+function toastMsg(text,color){const t=$('#toast');t.textContent=text;t.style.background=color||'#27548a';t.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove('show'),1500);}
+
+/* ============ DATA ============ */
+const BUILTIN={id:'builtin',name:'Эрудит',questions:[
+ {q:'Столица России?',a:['Москва','Париж','Токио','Рим'],c:0},
+ {q:'Самое глубокое озеро в мире?',a:['Байкал','Каспий','Виктория','Титикака'],c:0},
+ {q:'Кто написал «Евгений Онегин»?',a:['Пушкин','Толстой','Достоевский','Чехов'],c:0},
+ {q:'Сколько цветов у радуги?',a:['7','6','8','5'],c:0},
+ {q:'Химический символ золота?',a:['Au','Ag','Fe','Cu'],c:0},
+ {q:'Самая большая планета?',a:['Юпитер','Сатурн','Земля','Марс'],c:0},
+ {q:'Сколько ног у паука?',a:['8','6','4','10'],c:0},
+ {q:'Первый человек в космосе?',a:['Гагарин','Армстронг','Леонов','Титов'],c:0},
+ {q:'Столица Франции?',a:['Париж','Лондон','Берлин','Мадрид'],c:0},
+ {q:'Сколько дней в високосном году?',a:['366','365','364','367'],c:0},
+ {q:'Самое быстрое животное?',a:['Гепард','Лев','Лошадь','Тигр'],c:0},
+ {q:'Сколько планет в Солнечной системе?',a:['8','7','9','10'],c:0}
+]};
+const DIFFS=[
+ {id:'easy',name:'Лёгкий',desc:'Время на движение до ответа не ограничено. Дракон не может врезаться в себя или края экрана — он проходит сквозь них.'},
+ {id:'medium',name:'Средний',desc:'Время на движение до ответа не ограничено. Дракон может врезаться в себя или края экрана — тогда игра заканчивается.'},
+ {id:'hard',name:'Тяжёлый',desc:'Время на движение до ответа ограничено 15 секундами. Дракон может врезаться в себя или края экрана — тогда игра заканчивается.'}
+];
+const DIFF_NAME={easy:'Лёгкий',medium:'Средний',hard:'Тяжёлый'};
+
+const settings={
+  difficulty:store.get('dq_diff','easy'),
+  levelId:store.get('dq_level','builtin'),
+  totalRating:store.get('dq_rating',0),
+  customLevels:store.get('dq_levels',[])
+};
+function saveSettings(){store.set('dq_diff',settings.difficulty);store.set('dq_level',settings.levelId);store.set('dq_rating',settings.totalRating);store.set('dq_levels',settings.customLevels);}
+function getCurrentLevel(){if(settings.levelId==='builtin')return BUILTIN;return settings.customLevels.find(l=>l.id===settings.levelId)||BUILTIN;}
+
+/* ============ PAGES ============ */
+function showPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id===id));
+  if(id!=='page-game')stopGame();
+  if(id==='page-menu')$('#menuRating').textContent=settings.totalRating;
+  if(id==='page-levels')renderLevels();
+  if(id==='page-difficulty')renderDifficulty();
+  if(id==='page-upload')renderUpload();
+}
+
+/* ============ LEVELS PAGE ============ */
+function renderLevels(){
+  const wrap=$('#levelsList');wrap.innerHTML='';
+  [BUILTIN,...settings.customLevels].forEach(l=>{
+    const card=document.createElement('div');
+    card.className='level-card'+(settings.levelId===l.id?' selected':'');
+    card.innerHTML='<div class="lc-name">'+escapeHtml(l.name)+'</div><div class="lc-count">Вопросов: '+l.questions.length+'</div>';
+    card.onclick=()=>{settings.levelId=l.id;saveSettings();renderLevels();toastMsg('Выбран уровень: '+l.name,'#27548a');};
+    if(l.id!=='builtin'){
+      const b=document.createElement('button');b.className='mini red';b.textContent='🗑';
+      b.onclick=e=>{e.stopPropagation();settings.customLevels=settings.customLevels.filter(x=>x.id!==l.id);if(settings.levelId===l.id)settings.levelId='builtin';saveSettings();renderLevels();};
+      card.appendChild(b);
+    }
+    wrap.appendChild(card);
+  });
+}
+
+/* ============ DIFFICULTY PAGE ============ */
+function renderDifficulty(){
+  const wrap=$('#diffList');wrap.innerHTML='';
+  DIFFS.forEach(d=>{
+    const card=document.createElement('div');
+    card.className='diff-card'+(settings.difficulty===d.id?' selected':'');
+    card.innerHTML='<div class="lc-name">'+d.name+'</div><div class="diff-desc">'+d.desc+'</div>';
+    card.onclick=()=>{settings.difficulty=d.id;saveSettings();renderDifficulty();toastMsg('Сложность: '+d.name,'#27548a');};
+    wrap.appendChild(card);
+  });
+}
+
+/* ============ UPLOAD PAGE ============ */
+function renderUpload(){
+  const sel=$('#matLevel');const prev=sel.value;sel.innerHTML='';
+  settings.customLevels.forEach(l=>{const o=document.createElement('option');o.value=l.id;o.textContent=l.name;sel.appendChild(o);});
+  const on=document.createElement('option');on.value='new';on.textContent='— Новый уровень —';sel.appendChild(on);
+  if(settings.customLevels.some(l=>l.id===prev))sel.value=prev;
+  else sel.value=settings.customLevels.length?settings.customLevels[0].id:'new';
+  renderMatQuestions();
+}
+function renderMatQuestions(){
+  const list=$('#matQuestions');list.innerHTML='';
+  const lvl=settings.customLevels.find(l=>l.id===$('#matLevel').value);
+  if(!lvl){list.innerHTML='<p class="dim">Создайте уровень, чтобы добавлять вопросы.</p>';return;}
+  if(!lvl.questions.length){list.innerHTML='<p class="dim">В уровне пока нет вопросов.</p>';return;}
+  lvl.questions.forEach((q,i)=>{
+    const div=document.createElement('div');div.className='q-item';
+    div.innerHTML='<b>'+(i+1)+'.</b> '+escapeHtml(q.q)+' <span style="color:var(--green)">✓ '+escapeHtml(q.a[q.c])+'</span>';
+    const b=document.createElement('button');b.className='mini red';b.textContent='✕';
+    b.onclick=()=>{lvl.questions.splice(i,1);saveSettings();renderMatQuestions();};
+    div.appendChild(b);list.appendChild(div);
+  });
+}
+
+/* ============ GAME ============ */
+const C={red:'#d9453c',red2:'#e0504a',gold:'#e6b95c',tan:'#d9b380',green:'#3fa65c',white:'#ffffff',dark:'#20232a'};
+const APPLE_COLORS=['#e0504a','#4caf6e','#e8c15a','#4d9de0'];
+
+const Game={
+  canvas:null,g:null,W:0,H:0,cell:28,cols:0,rows:0,offX:0,offY:0,
+  segments:[],dir:{x:1,y:0},nextDir:{x:1,y:0},
+  tick:160,lastStep:0,lastFrame:0,raf:0,running:false,paused:false,
+  apples:[],eaten:null,questions:[],qi:0,score:0,grow:0,
+  state:'idle',stateAt:0,jaw:0,eyesX:false,timeLeft:15000,
+  stars:[],clouds:[],level:null,
+
+  init(level){
+    this.level=level;
+    this.canvas=$('#gameCanvas');this.g=this.canvas.getContext('2d');
+    this.resizeCanvas();
+    const cy=Math.floor(this.rows/2);
+    const sx=Math.min(6,this.cols-4);
+    this.segments=[{x:sx,y:cy,px:sx,py:cy},{x:sx-1,y:cy,px:sx-1,py:cy},{x:sx-2,y:cy,px:sx-2,py:cy}];
+    this.dir={x:1,y:0};this.nextDir={x:1,y:0};
+    this.tick=settings.difficulty==='hard'?130:settings.difficulty==='medium'?150:170;
+    this.questions=level.questions;this.qi=0;this.score=0;this.grow=0;
+    this.state='playing';this.paused=false;this.eyesX=false;this.jaw=0;this.eaten=null;
+    this.stars=Array.from({length:42},()=>({x:Math.random()*this.W,y:Math.random()*this.H*0.75,r:Math.random()*1.6+0.6,tw:Math.random()*6}));
+    this.clouds=Array.from({length:5},()=>({x:Math.random()*this.W,y:20+Math.random()*this.H*0.5,s:0.5+Math.random()*0.7,v:0.15+Math.random()*0.25}));
+    $('#overlay').classList.add('hidden');
+    $('#btnPause').textContent='⏸';
+    $('#hudDiff').textContent=DIFF_NAME[settings.difficulty];
+    $('#hudLevel').textContent=level.name;
+    $('#timerWrap').style.display=settings.difficulty==='hard'?'block':'none';
+    this.prepareQuestion();
+    this.lastStep=performance.now();this.lastFrame=this.lastStep;
+    this.running=true;
+    cancelAnimationFrame(this.raf);
+    this.raf=requestAnimationFrame(ts=>this.loop(ts));
+  },
+
+  resizeCanvas(){
+    const wrap=$('#fieldWrap');const w=wrap.clientWidth,h=wrap.clientHeight;
+    const dpr=Math.min(2,window.devicePixelRatio||1);
+    this.canvas.width=Math.max(1,Math.round(w*dpr));this.canvas.height=Math.max(1,Math.round(h*dpr));
+    this.canvas.style.width=w+'px';this.canvas.style.height=h+'px';
+    this.g.setTransform(dpr,0,0,dpr,0,0);this.g.imageSmoothingEnabled=false;
+    this.W=w;this.H=h;
+    this.cell=w<520?24:28;
+    this.cols=Math.max(12,Math.floor(w/this.cell));
+    this.rows=Math.max(10,Math.floor(h/this.cell));
+    this.offX=Math.floor((w-this.cols*this.cell)/2);
+    this.offY=Math.floor((h-this.rows*this.cell)/2);
+  },
+
+  prepareQuestion(){
+    const q=this.questions[this.qi];
+    const opts=shuffle(q.a.map((t,i)=>({text:t,correct:i===q.c})));
+    this.apples=[];
+    const minD=Math.max(4,Math.floor(Math.min(this.cols,this.rows)/3));
+    for(let i=0;i<4;i++){
+      let x=0,y=0,placed=false,tries=0;
+      while(!placed&&tries<600){
+        tries++;
+        x=1+Math.floor(Math.random()*(this.cols-2));
+        y=1+Math.floor(Math.random()*(this.rows-2));
+        const head=this.segments[0];
+        if(Math.abs(x-head.x)+Math.abs(y-head.y)<6)continue;
+        let ok=true;
+        for(const a of this.apples){if(Math.abs(x-a.x)+Math.abs(y-a.y)<minD){ok=false;break;}}
+        if(ok)for(const sgm of this.segments){if(sgm.x===x&&sgm.y===y){ok=false;break;}}
+        if(ok)placed=true;
+      }
+      if(!placed){x=1+((i*3+2)%(this.cols-2));y=1+((i*4+1)%(this.rows-2));}
+      this.apples.push({x:x,y:y,color:APPLE_COLORS[i],text:opts[i].text,correct:opts[i].correct});
+    }
+    this.timeLeft=15000;
+    $('#questionText').textContent=q.q;
+    $('#qNum').textContent='Вопрос '+(this.qi+1)+'/'+this.questions.length;
+    this.updateHud();
+  },
+
+  updateHud(){$('#hudScore').textContent='Очки: '+this.score;},
+
+  setDir(d){
+    if(!this.running||this.paused||this.state!=='playing')return;
+    if(d.x===-this.dir.x&&d.y===-this.dir.y)return;
+    this.nextDir=d;
+  },
+
+  loop(ts){
+    if(!this.running)return;
+    const dt=Math.min(100,ts-this.lastFrame);this.lastFrame=ts;
+    if(!this.paused){
+      if(this.state==='playing'){
+        if(settings.difficulty==='hard'){
+          this.timeLeft-=dt;
+          const bar=$('#timerBar');const p=Math.max(0,this.timeLeft/15000);
+          bar.style.width=(p*100)+'%';
+          bar.style.background=p<0.33?'#e0504a':(p<0.66?'#e8c15a':'#4caf6e');
+          if(this.timeLeft<=0){this.state='wrong';this.stateAt=ts;this.eyesX=true;toastMsg('Время вышло!','#b58a2a');}
         }
+        if(this.state==='playing'&&ts-this.lastStep>=this.tick)this.step(ts);
+      }else if(this.state==='eat'){
+        this.jaw=Math.min(1,(ts-this.stateAt)/250);
+        if(ts-this.stateAt>520)this.resolveEat();
+      }else if(this.state==='wrong'){
+        if(ts-this.stateAt>950)this.resolveWrong();
+      }
+    }
+    const t=(this.state==='playing'&&!this.paused)?Math.min(1,(ts-this.lastStep)/this.tick):1;
+    this.draw(ts,t);
+    this.raf=requestAnimationFrame(t2=>this.loop(t2));
+  },
 
-        // Инициализация игры
-        function initGame() {
-            resetGame();
-            updateUI();
-            addLogEntry("Игра готова! Выберите заклинание и начните дуэль.");
-            
-            setWizardImages();
-            
-            spellButtons.forEach(btn => btn.classList.remove('active'));
-            gameState.selectedSpell = null;
-            
-            mathProblemEl.style.display = 'none';
-            timerContainerEl.style.display = 'none';
-            damageInfoEl.style.display = 'none';
-        }
+  step(ts){
+    this.lastStep=ts;
+    this.dir=this.nextDir;
+    const head=this.segments[0];
+    let nx=head.x+this.dir.x,ny=head.y+this.dir.y;
+    if(settings.difficulty==='easy'){
+      nx=(nx+this.cols)%this.cols;ny=(ny+this.rows)%this.rows;
+    }else{
+      if(nx<0||ny<0||nx>=this.cols||ny>=this.rows)return this.finish(false);
+      const skipTail=this.grow>0?0:1;
+      for(let i=0;i<this.segments.length-skipTail;i++){
+        if(this.segments[i].x===nx&&this.segments[i].y===ny)return this.finish(false);
+      }
+    }
+    for(let i=this.segments.length-1;i>=1;i--){
+      const sgm=this.segments[i];
+      sgm.px=sgm.x;sgm.py=sgm.y;
+      sgm.x=this.segments[i-1].x;sgm.y=this.segments[i-1].y;
+    }
+    head.px=head.x;head.py=head.y;head.x=nx;head.y=ny;
+    if(this.grow>0){
+      this.grow--;
+      const tail=this.segments[this.segments.length-1];
+      this.segments.push({x:tail.px,y:tail.py,px:tail.px,py:tail.py});
+    }
+    const a=this.apples.find(ap=>ap.x===nx&&ap.y===ny);
+    if(a){this.eaten=a;this.apples=this.apples.filter(x=>x!==a);this.state='eat';this.stateAt=ts;}
+  },
 
-        // Установка изображений волшебников
-        function setWizardImages() {
-            const wizardAvatars = document.querySelectorAll('.wizard-avatar');
-            const wizardImageUrl = createWizardImage();
-            
-            wizardAvatars.forEach((avatar, index) => {
-                const placeholder = avatar.querySelector('.wizard-placeholder');
-                if (placeholder) {
-                    placeholder.style.display = 'none';
-                }
-                
-                const oldImg = avatar.querySelector('.wizard-image');
-                if (oldImg) {
-                    oldImg.remove();
-                }
-                
-                const img = document.createElement('img');
-                img.className = 'wizard-image';
-                img.src = wizardImageUrl;
-                img.alt = 'Волшебник';
-                
-                if (index === 1) {
-                    img.style.transform = 'scaleX(-1)';
-                }
-                
-                avatar.appendChild(img);
-            });
-        }
+  resolveEat(){
+    const a=this.eaten;this.jaw=0;
+    if(a.correct){
+      this.score+=10;this.grow+=1;
+      toastMsg('Верно! +10','#3fa65c');
+      this.state='playing';this.lastStep=performance.now();
+      this.nextQuestion();
+    }else{
+      this.state='wrong';this.stateAt=performance.now();this.eyesX=true;
+      toastMsg('Ошибка!','#c0392f');
+    }
+    this.updateHud();
+  },
 
-        // Сброс игры
-        function resetGame() {
-            gameState.wizard1.health = 100;
-            gameState.wizard2.health = 100;
-            gameState.currentPlayer = 1;
-            gameState.targetPlayer = 2;
-            gameState.gameActive = false;
-            gameState.selectedSpell = null;
-            gameState.currentProblem = null;
-            gameState.currentAnswer = null;
-            gameState.timer = 20;
-            gameState.currentDamage = gameState.baseDamage;
-            
-            clearInterval(gameState.timerInterval);
-            gameState.timerInterval = null;
-            
-            gameOverEl.style.display = 'none';
-            mathProblemEl.style.display = 'none';
-            timerContainerEl.style.display = 'none';
-            damageInfoEl.style.display = 'none';
-            
-            updateHealthBars();
-            updateTurnIndicator();
-        }
+  resolveWrong(){
+    this.eyesX=false;
+    if(this.segments.length>3)this.segments.splice(this.segments.length-2,1);
+    this.state='playing';this.lastStep=performance.now();
+    this.nextQuestion();
+  },
 
-        // Обновление полос здоровья
-        function updateHealthBars() {
-            gameState.wizard1.health = Math.round(gameState.wizard1.health);
-            gameState.wizard2.health = Math.round(gameState.wizard2.health);
-            
-            if (gameState.wizard1.health < 0) gameState.wizard1.health = 0;
-            if (gameState.wizard2.health < 0) gameState.wizard2.health = 0;
-            
-            const wizard1Percent = (gameState.wizard1.health / gameState.wizard1.maxHealth) * 100;
-            const wizard2Percent = (gameState.wizard2.health / gameState.wizard2.maxHealth) * 100;
-            
-            wizard1HealthBarEl.style.width = `${wizard1Percent}%`;
-            wizard2HealthBarEl.style.width = `${wizard2Percent}%`;
-            
-            wizard1HealthEl.textContent = gameState.wizard1.health;
-            wizard2HealthEl.textContent = gameState.wizard2.health;
-        }
+  nextQuestion(){
+    this.qi++;
+    if(this.qi>=this.questions.length)this.finish(true);
+    else this.prepareQuestion();
+  },
 
-        // Обновление индикатора хода
-        function updateTurnIndicator() {
-            const currentWizard = gameState.currentPlayer === 1 ? gameState.wizard1 : gameState.wizard2;
-            const wizardClass = gameState.currentPlayer === 1 ? 'wizard-1-color' : 'wizard-2-color';
-            turnIndicatorEl.innerHTML = `Ход: <span class="${wizardClass}">${currentWizard.name}</span>`;
-        }
+  finish(win){
+    this.state='over';
+    settings.totalRating+=this.score;saveSettings();
+    $('#ovTitle').textContent=win?'🐉 ПОБЕДА!':'💥 ИГРА ОКОНЧЕНА';
+    $('#ovText').innerHTML=(win?'Все вопросы уровня отвечены!':'Дракон потерпел крушение.')+
+      '<br>Очки за игру: <b style="color:var(--gold)">'+this.score+'</b>'+
+      '<br>Общий рейтинг: <b style="color:var(--sky)">'+settings.totalRating+'</b>';
+    $('#overlay').classList.remove('hidden');
+  },
 
-        // Добавление записи в лог
-        function addLogEntry(message, className = "") {
-            const entry = document.createElement('div');
-            entry.className = `log-entry ${className}`;
-            entry.textContent = message;
-            gameLogEl.appendChild(entry);
-            gameLogEl.scrollTop = gameLogEl.scrollHeight;
-        }
+  /* ---------- DRAW ---------- */
+  draw(ts,t){
+    const g=this.g,s=this.cell;
+    g.clearRect(0,0,this.W,this.H);
+    const grad=g.createLinearGradient(0,0,0,this.H);
+    grad.addColorStop(0,'#0d2a4c');grad.addColorStop(0.55,'#27548a');grad.addColorStop(1,'#7fc4ef');
+    g.fillStyle=grad;g.fillRect(0,0,this.W,this.H);
+    g.fillStyle='#eaf6ff';
+    for(const st of this.stars){g.globalAlpha=0.3+0.55*Math.abs(Math.sin(ts/800+st.tw));g.fillRect(st.x,st.y,st.r,st.r);}
+    g.globalAlpha=1;
+    for(const c of this.clouds){
+      if(!this.paused)c.x+=c.v;
+      if(c.x>this.W+100)c.x=-100;
+      g.fillStyle='rgba(255,255,255,0.13)';
+      g.beginPath();g.ellipse(c.x,c.y,46*c.s,14*c.s,0,0,Math.PI*2);g.ellipse(c.x+30*c.s,c.y+6*c.s,34*c.s,12*c.s,0,0,Math.PI*2);g.fill();
+    }
+    g.fillStyle='rgba(9,28,52,0.5)';
+    g.beginPath();g.moveTo(0,this.H);
+    const mw=150;
+    for(let x=0;x<=this.W+mw;x+=mw){g.lineTo(x+mw/2,this.H-44-((x/mw)%2?16:0));g.lineTo(x+mw,this.H-6);}
+    g.lineTo(this.W,this.H);g.closePath();g.fill();
 
-        // Запуск игры
-        function startGame() {
-            if (gameState.gameActive) return;
-            
-            gameState.gameActive = true;
-            startBtn.textContent = "Дуэль началась!";
-            addLogEntry("=== ДУЭЛЬ НАЧАЛАСЬ! ===", "wizard-1-color");
-            addLogEntry(`Режим: ${gameState.gameMode === 'pvp' ? 'Игрок против Игрока' : 'Игрок против Компьютера'}`);
-            updateTurnIndicator();
-            
-            if (gameState.gameMode === 'pve' && gameState.currentPlayer === 2) {
-                setTimeout(computerTurn, 1000);
-            }
-        }
+    g.save();g.translate(this.offX,this.offY);
+    for(const a of this.apples)this.drawApple(a);
+    const pos=this.segments.map(sgm=>{
+      const wx=Math.abs(sgm.x-sgm.px)>1,wy=Math.abs(sgm.y-sgm.py)>1;
+      return {x:lerp(wx?sgm.x:sgm.px,sgm.x,t),y:lerp(wy?sgm.y:sgm.py,sgm.y,t)};
+    });
+    for(let i=this.segments.length-1;i>=0;i--){
+      const p=pos[i];
+      const bob=Math.sin(ts/300+i*0.55)*2;
+      let ang;
+      if(i===0){const q=pos[1]||{x:p.x-1,y:p.y};ang=Math.atan2(p.y-q.y,p.x-q.x);}
+      else{const q=pos[i-1];ang=Math.atan2(q.y-p.y,q.x-p.x);}
+      g.save();
+      g.translate(p.x*s+s/2,p.y*s+s/2+bob);
+      g.rotate(ang);
+      if(i===0)this.drawHead(s);
+      else if(i===1)this.drawMain(s);
+      else if(i===this.segments.length-1)this.drawTail(s);
+      else this.drawMid(s);
+      g.restore();
+    }
+    g.restore();
+  },
 
-        // Выбор заклинания
-        function selectSpell(spellType) {
-            if (!gameState.gameActive) {
-                addLogEntry("Сначала начните дуэль!");
-                return;
-            }
-            
-            if (gameState.gameMode === 'pve' && gameState.currentPlayer === 2) {
-                return;
-            }
-            
-            gameState.targetPlayer = gameState.currentPlayer === 1 ? 2 : 1;
-            
-            spellButtons.forEach(btn => btn.classList.remove('active'));
-            
-            gameState.selectedSpell = spellType;
-            
-            let selectedButton;
-            switch(spellType) {
-                case 'water': selectedButton = spellWaterBtn; break;
-                case 'fire': selectedButton = spellFireBtn; break;
-                case 'lightning': selectedButton = spellLightningBtn; break;
-                case 'earth': selectedButton = spellEarthBtn; break;
-            }
-            
-            if (selectedButton) {
-                selectedButton.classList.add('active');
-            }
-            
-            createMathProblem(spellType);
-        }
+  drawApple(a){
+    const g=this.g,s=this.cell,cx=a.x*s+s/2,cy=a.y*s+s/2;
+    g.font='700 11px Rubik, sans-serif';
+    const lines=wrapText(a.text,16);
+    const bw=Math.max.apply(null,lines.map(l=>g.measureText(l).width))+12;
+    const bh=lines.length*13+8;
+    const fieldW=this.cols*s;
+    const ccx=Math.min(Math.max(cx,bw/2+2),fieldW-bw/2-2);
+    let ly=cy-s*0.55-bh-4;if(ly<2)ly=cy+s*0.55+4;
+    g.fillStyle='rgba(7,24,44,0.85)';roundRect(g,ccx-bw/2,ly,bw,bh,5);g.fill();
+    g.strokeStyle=a.color;g.lineWidth=1.5;roundRect(g,ccx-bw/2,ly,bw,bh,5);g.stroke();
+    g.fillStyle='#f2f7fc';g.textAlign='center';g.textBaseline='top';
+    lines.forEach((l,ii)=>g.fillText(l,ccx,ly+4+ii*13));
+    g.fillStyle=a.color;g.beginPath();g.arc(cx,cy,s*0.42,0,Math.PI*2);g.fill();
+    g.fillStyle='rgba(255,255,255,0.35)';g.beginPath();g.arc(cx-s*0.13,cy-s*0.14,s*0.13,0,Math.PI*2);g.fill();
+    g.strokeStyle='#6b4a2b';g.lineWidth=2.5;g.beginPath();g.moveTo(cx,cy-s*0.4);g.lineTo(cx+2,cy-s*0.58);g.stroke();
+    g.fillStyle=C.green;g.beginPath();g.ellipse(cx+7,cy-s*0.55,6,3,-0.5,0,Math.PI*2);g.fill();
+  },
 
-        // Создание математической задачи
-        function createMathProblem(spellType) {
-            let num1, num2, answer, operator, problemText;
-            
-            num1 = Math.floor(Math.random() * 9) + 1;
-            num2 = Math.floor(Math.random() * 9) + 1;
-            
-            switch(spellType) {
-                case 'water':
-                    operator = '+';
-                    answer = num1 + num2;
-                    problemText = `${num1} + ${num2} = ?`;
-                    break;
-                    
-                case 'fire':
-                    if (num1 < num2) {
-                        [num1, num2] = [num2, num1];
-                    }
-                    operator = '-';
-                    answer = num1 - num2;
-                    problemText = `${num1} - ${num2} = ?`;
-                    break;
-                    
-                case 'lightning':
-                    operator = '÷';
-                    const product = num1 * num2;
-                    answer = num2;
-                    problemText = `${product} ÷ ${num1} = ?`;
-                    num1 = product;
-                    break;
-                    
-                case 'earth':
-                    operator = '×';
-                    answer = num1 * num2;
-                    problemText = `${num1} × ${num2} = ?`;
-                    break;
-            }
-            
-            gameState.currentProblem = {
-                num1, num2, answer, operator, problemText
-            };
-            
-            problemTextEl.textContent = problemText;
-            mathProblemEl.style.display = 'block';
-            answerInputEl.value = '';
-            answerInputEl.focus();
-            
-            resetTimer();
-            
-            damageValueEl.textContent = gameState.baseDamage.toFixed(1);
-            damageInfoEl.style.display = 'block';
-            
-            const spellNames = {
-                water: "Водяной поток (сложение)",
-                fire: "Огненный шар (вычитание)",
-                lightning: "Удар молнии (деление)",
-                earth: "Падение метеорита (умножение)"
-            };
-            
-            const currentWizard = gameState.currentPlayer === 1 ? gameState.wizard1 : gameState.wizard2;
-            addLogEntry(`${currentWizard.name} выбирает ${spellNames[spellType]}. Решите задачу за 20 секунд!`, 
-                      gameState.currentPlayer === 1 ? 'wizard-1-color' : 'wizard-2-color');
-        }
+  drawHead(s){
+    const g=this.g,jaw=this.jaw;
+    g.fillStyle=C.green;
+    g.fillRect(-s*0.85,-s*0.5,s*0.3,s);
+    g.fillRect(-s*0.7,-s*0.64,s*0.2,s*0.2);
+    g.fillRect(-s*0.7,s*0.44,s*0.2,s*0.2);
+    g.fillStyle=C.gold;
+    g.fillRect(-s*0.5,-s*0.8,s*0.16,s*0.36);
+    g.fillRect(-s*0.2,-s*0.88,s*0.16,s*0.44);
+    g.fillStyle=C.red;
+    g.fillRect(-s*0.6,-s*0.42,s*1.05,s*0.84);
+    g.fillRect(s*0.2,-s*0.32,s*0.44,s*0.3);
+    g.fillStyle=C.tan;
+    g.fillRect(s*0.2,-s*0.06,s*0.44,s*0.14);
+    g.save();g.translate(-s*0.1,s*0.26);g.rotate(jaw*0.6);
+    g.fillStyle=C.red;g.fillRect(-s*0.4,0,s*0.95,s*0.24);
+    g.fillStyle=C.white;g.fillRect(s*0.32,-s*0.09,s*0.1,s*0.09);
+    g.restore();
+    const ex=s*0.06,ey=-s*0.24;
+    if(this.eyesX){
+      g.strokeStyle=C.dark;g.lineWidth=Math.max(2,s*0.09);
+      g.beginPath();
+      g.moveTo(ex-s*0.13,ey-s*0.13);g.lineTo(ex+s*0.13,ey+s*0.13);
+      g.moveTo(ex+s*0.13,ey-s*0.13);g.lineTo(ex-s*0.13,ey+s*0.13);
+      g.stroke();
+    }else{
+      g.fillStyle=C.white;g.fillRect(ex-s*0.15,ey-s*0.16,s*0.3,s*0.3);
+      g.fillStyle=C.dark;g.fillRect(ex-s*0.02,ey-s*0.08,s*0.13,s*0.16);
+    }
+  },
 
-        // Сброс и запуск таймера
-        function resetTimer() {
-            clearInterval(gameState.timerInterval);
-            
-            gameState.timer = 20;
-            gameState.currentDamage = gameState.baseDamage;
-            updateTimerDisplay();
-            
-            timerContainerEl.style.display = 'flex';
-            
-            gameState.timerInterval = setInterval(() => {
-                gameState.timer--;
-                gameState.currentDamage = gameState.baseDamage * (gameState.timer / 20);
-                
-                updateTimerDisplay();
-                
-                if (gameState.timer <= 0) {
-                    clearInterval(gameState.timerInterval);
-                    timeExpired();
-                }
-            }, 1000);
-        }
+  drawChecker(s){
+    const g=this.g;
+    g.fillStyle=C.red;g.fillRect(-s*0.5,-s*0.4,s,s*0.8);
+    const q=s/4;g.fillStyle=C.gold;
+    for(let r=0;r<2;r++)for(let c=0;c<4;c++){if((r+c)%2===0)g.fillRect(-s/2+c*q,-q+r*q,q,q);}
+    g.fillStyle=C.tan;g.fillRect(-s*0.5,s*0.28,s,s*0.12);
+  },
 
-        // Обновление отображения таймера
-        function updateTimerDisplay() {
-            timerTextEl.textContent = `${gameState.timer} сек`;
-            
-            const sandHeight = 60 * (gameState.timer / 20);
-            hourglassSandEl.style.height = `${sandHeight}px`;
-            
-            damageValueEl.textContent = gameState.currentDamage.toFixed(1);
-        }
+  drawMain(s){
+    const g=this.g;
+    g.fillStyle=C.red;
+    g.fillRect(-s*0.34,-s*0.78,s*0.17,s*0.4);g.fillRect(s*0.14,-s*0.78,s*0.17,s*0.4);
+    g.fillRect(-s*0.34,s*0.38,s*0.17,s*0.4);g.fillRect(s*0.14,s*0.38,s*0.17,s*0.4);
+    g.fillStyle=C.tan;
+    g.fillRect(-s*0.38,-s*0.9,s*0.25,s*0.14);g.fillRect(s*0.1,-s*0.9,s*0.25,s*0.14);
+    g.fillRect(-s*0.38,s*0.76,s*0.25,s*0.14);g.fillRect(s*0.1,s*0.76,s*0.25,s*0.14);
+    this.drawChecker(s);
+  },
 
-        // Время вышло
-        function timeExpired() {
-            addLogEntry("Время вышло! Ход переходит к другому игроку.", "fire-spell");
-            
-            mathProblemEl.style.display = 'none';
-            timerContainerEl.style.display = 'none';
-            damageInfoEl.style.display = 'none';
-            
-            switchTurn();
-        }
+  drawMid(s){this.drawChecker(s);},
 
-        // Проверка ответа
-        function checkAnswer() {
-            const userAnswer = parseInt(answerInputEl.value);
-            
-            if (isNaN(userAnswer)) {
-                addLogEntry("Введите число!", "fire-spell");
-                return;
-            }
-            
-            if (userAnswer === gameState.currentProblem.answer) {
-                handleCorrectAnswer();
-            } else {
-                handleIncorrectAnswer();
-            }
-        }
+  drawTail(s){
+    const g=this.g;
+    g.fillStyle=C.red;
+    g.beginPath();g.moveTo(s*0.5,-s*0.36);g.lineTo(-s*0.78,0);g.lineTo(s*0.5,s*0.36);g.closePath();g.fill();
+    g.fillStyle=C.gold;
+    g.beginPath();g.moveTo(s*0.45,-s*0.18);g.lineTo(-s*0.5,0);g.lineTo(s*0.45,s*0.18);g.closePath();g.fill();
+  }
+};
 
-        // Обработка правильного ответа
-        function handleCorrectAnswer() {
-            clearInterval(gameState.timerInterval);
-            
-            const currentWizard = gameState.currentPlayer === 1 ? gameState.wizard1 : gameState.wizard2;
-            const targetWizard = gameState.targetPlayer === 1 ? gameState.wizard1 : gameState.wizard2;
-            
-            addLogEntry(`${currentWizard.name} решил задачу правильно! Сила атаки: ${gameState.currentDamage.toFixed(1)} ед.`, 
-                      gameState.currentPlayer === 1 ? 'wizard-1-color' : 'wizard-2-color');
-            
-            mathProblemEl.style.display = 'none';
-            timerContainerEl.style.display = 'none';
-            damageInfoEl.style.display = 'none';
-            
-            const isLeftToRight = gameState.currentPlayer === 1;
-            animateSpell(gameState.selectedSpell, isLeftToRight);
-            
-            setTimeout(() => {
-                if (gameState.gameMode === 'pve' && gameState.currentPlayer === 2) {
-                    applyComputerDamage();
-                } else {
-                    applyDamage(gameState.currentDamage);
-                }
-            }, 1000);
-        }
+function stopGame(){Game.running=false;cancelAnimationFrame(Game.raf);}
 
-        // Функция для выбора случайного действия компьютера
-        function getComputerAction() {
-            const random = Math.random();
-            let cumulativeProbability = 0;
-            
-            for (const action of gameState.computerActions) {
-                cumulativeProbability += action.probability;
-                if (random <= cumulativeProbability) {
-                    return action;
-                }
-            }
-            
-            return gameState.computerActions[gameState.computerActions.length - 1];
-        }
+function startGame(){
+  const lvl=getCurrentLevel();
+  if(!lvl.questions.length){toastMsg('В выбранном уровне нет вопросов','#c0392f');showPage('page-levels');return;}
+  showPage('page-game');
+  requestAnimationFrame(()=>Game.init(lvl));
+}
 
-        // Применение урона компьютера со случайным действием
-        function applyComputerDamage() {
-            const action = getComputerAction();
-            const attacker = gameState.currentPlayer === 1 ? gameState.wizard1 : gameState.wizard2;
-            const defender = gameState.targetPlayer === 1 ? gameState.wizard1 : gameState.wizard2;
-            
-            let finalDamage = gameState.currentDamage;
-            let miss = false;
-            
-            // ИЗМЕНЕНО: Добавлены новые варианты действий
-            switch(action.type) {
-                case 'miss':
-                    finalDamage = 0;
-                    miss = true;
-                    break;
-                case 'full':
-                    // Полный урон - ничего не меняем
-                    break;
-                case 'minus10':
-                    finalDamage *= 0.9;
-                    break;
-                case 'minus20':
-                    finalDamage *= 0.8;
-                    break;
-                case 'minus30':
-                    finalDamage *= 0.7;
-                    break;
-                case 'plus10': // НОВОЕ: урон на 10% больше
-                    finalDamage *= 1.1;
-                    break;
-                case 'plus20': // НОВОЕ: урон на 20% больше
-                    finalDamage *= 1.2;
-                    break;
-            }
-            
-            finalDamage = Math.round(finalDamage * 10) / 10;
-            
-            // Логируем действие компьютера
-            addLogEntry(`Компьютер ${action.text}!`, "wizard-2-color");
-            
-            if (miss) {
-                showMissEffect();
-                
-                addLogEntry(`${attacker.name} промахнулся!`, "fire-spell");
-                
-                setTimeout(() => {
-                    switchTurn();
-                }, 1500);
-            } else {
-                applyDamage(finalDamage);
-            }
-        }
+/* ============ EVENTS ============ */
+$('#btnStart').onclick=startGame;
+$('#btnLevels').onclick=()=>showPage('page-levels');
+$('#btnDiff').onclick=()=>showPage('page-difficulty');
+$('#btnUpload').onclick=()=>showPage('page-upload');
+$('#btnHow').onclick=()=>showPage('page-howto');
+$('#btnCreators').onclick=()=>showPage('page-creators');
+$('#btnExit').onclick=()=>{showPage('page-exit');try{window.close();}catch(e){}};
+document.querySelectorAll('[data-back]').forEach(b=>b.onclick=()=>showPage('page-menu'));
+$('#btnAgain').onclick=()=>Game.init(Game.level);
+$('#btnMenu').onclick=()=>showPage('page-menu');
+$('#btnToMenu').onclick=()=>showPage('page-menu');
+$('#btnPause').onclick=()=>{
+  if(!Game.running||Game.state==='over')return;
+  Game.paused=!Game.paused;
+  $('#btnPause').textContent=Game.paused?'▶':'⏸';
+  toastMsg(Game.paused?'Пауза':'Играем!','#27548a');
+};
 
-        // Применение урона
-        function applyDamage(damage) {
-            const attacker = gameState.currentPlayer === 1 ? gameState.wizard1 : gameState.wizard2;
-            const defender = gameState.targetPlayer === 1 ? gameState.wizard1 : gameState.wizard2;
-            
-            const finalDamage = Math.round(damage * 10) / 10;
-            defender.health -= finalDamage;
-            
-            defender.health = Math.round(defender.health);
-            
-            if (defender.health < 0) defender.health = 0;
-            
-            showDamageEffect(gameState.targetPlayer, finalDamage);
-            
-            updateHealthBars();
-            
-            addLogEntry(`${attacker.name} наносит ${finalDamage} урона ${defender.name}!`, 
-                      gameState.currentPlayer === 1 ? 'wizard-1-color' : 'wizard-2-color');
-            
-            if (defender.health <= 0) {
-                endGame(attacker.name);
-                return;
-            }
-            
-            setTimeout(() => {
-                switchTurn();
-            }, 1500);
-        }
+document.addEventListener('keydown',e=>{
+  if(!$('#page-game').classList.contains('active'))return;
+  const k=e.key.toLowerCase();let d=null;
+  if(k==='arrowup'||k==='w')d={x:0,y:-1};
+  else if(k==='arrowdown'||k==='s')d={x:0,y:1};
+  else if(k==='arrowleft'||k==='a')d={x:-1,y:0};
+  else if(k==='arrowright'||k==='d')d={x:1,y:0};
+  if(d){e.preventDefault();Game.setDir(d);}
+});
 
-        // Обработка неправильного ответа
-        function handleIncorrectAnswer() {
-            clearInterval(gameState.timerInterval);
-            
-            gameAreaEl.classList.add('shake');
-            setTimeout(() => {
-                gameAreaEl.classList.remove('shake');
-            }, 500);
-            
-            const currentWizard = gameState.currentPlayer === 1 ? gameState.wizard1 : gameState.wizard2;
-            addLogEntry(`${currentWizard.name} ошибся! Ход переходит к другому игроку.`, "fire-spell");
-            
-            mathProblemEl.style.display = 'none';
-            timerContainerEl.style.display = 'none';
-            damageInfoEl.style.display = 'none';
-            
-            setTimeout(() => {
-                switchTurn();
-            }, 1000);
-        }
+let touchStart=null;
+document.addEventListener('touchstart',e=>{
+  if(!$('#page-game').classList.contains('active'))return;
+  if(e.target.closest('button'))return;
+  const t=e.touches[0];touchStart={x:t.clientX,y:t.clientY};
+},{passive:true});
+document.addEventListener('touchmove',e=>{
+  if(!$('#page-game').classList.contains('active')||!touchStart)return;
+  if(e.target.closest('button'))return;
+  e.preventDefault();
+  const t=e.touches[0];
+  const dx=t.clientX-touchStart.x,dy=t.clientY-touchStart.y;
+  if(Math.abs(dx)>26||Math.abs(dy)>26){
+    if(Math.abs(dx)>Math.abs(dy))Game.setDir({x:dx>0?1:-1,y:0});
+    else Game.setDir({x:0,y:dy>0?1:-1});
+    touchStart={x:t.clientX,y:t.clientY};
+  }
+},{passive:false});
 
-        // Смена хода
-        function switchTurn() {
-            gameState.currentPlayer = gameState.currentPlayer === 1 ? 2 : 1;
-            gameState.targetPlayer = gameState.currentPlayer === 1 ? 2 : 1;
-            gameState.selectedSpell = null;
-            
-            spellButtons.forEach(btn => btn.classList.remove('active'));
-            
-            updateTurnIndicator();
-            
-            if (gameState.gameMode === 'pve' && gameState.currentPlayer === 2) {
-                setTimeout(computerTurn, 1000);
-            }
-        }
+window.addEventListener('resize',()=>{
+  if($('#page-game').classList.contains('active')&&Game.running){
+    Game.resizeCanvas();
+    Game.segments.forEach(sgm=>{sgm.x=Math.min(sgm.x,Game.cols-1);sgm.y=Math.min(sgm.y,Game.rows-1);sgm.px=sgm.x;sgm.py=sgm.y;});
+    Game.apples.forEach(a=>{a.x=Math.min(a.x,Game.cols-2);a.y=Math.min(a.y,Game.rows-2);});
+  }
+});
 
-        // Ход компьютера (для режима PVE)
-        function computerTurn() {
-            if (!gameState.gameActive || gameState.currentPlayer !== 2) return;
-            
-            const spells = ['water', 'fire', 'lightning', 'earth'];
-            const randomSpell = spells[Math.floor(Math.random() * spells.length)];
-            
-            selectSpell(randomSpell);
-            
-            setTimeout(() => {
-                answerInputEl.value = gameState.currentProblem.answer;
-                checkAnswer();
-            }, 1000 + Math.random() * 2000);
-        }
+$('#btnCreateLevel').onclick=()=>{
+  const name=$('#newLevelName').value.trim();
+  if(!name){toastMsg('Введите название уровня','#c0392f');return;}
+  const lvl={id:'lvl'+Date.now(),name:name,questions:[]};
+  settings.customLevels.push(lvl);saveSettings();
+  $('#newLevelName').value='';
+  renderUpload();$('#matLevel').value=lvl.id;renderMatQuestions();
+  toastMsg('Уровень создан!','#3fa65c');
+};
+$('#matLevel').addEventListener('change',renderMatQuestions);
+$('#btnSaveQuestion').onclick=()=>{
+  const lvl=settings.customLevels.find(l=>l.id===$('#matLevel').value);
+  if(!lvl){toastMsg('Сначала создайте уровень','#c0392f');return;}
+  const q=$('#inpQuestion').value.trim();
+  const ans=[0,1,2,3].map(i=>$('#inpA'+i).value.trim());
+  const checked=document.querySelector('input[name=correct]:checked');
+  const correct=checked?Number(checked.value):-1;
+  if(!q||ans.some(a=>!a)||correct<0){toastMsg('Заполните все поля и отметьте верный ответ','#c0392f');return;}
+  lvl.questions.push({q:q,a:ans,c:correct});saveSettings();
+  $('#inpQuestion').value='';
+  [0,1,2,3].forEach(i=>{$('#inpA'+i).value='';});
+  document.querySelector('input[name=correct][value="0"]').checked=true;
+  renderMatQuestions();
+  toastMsg('Вопрос сохранён!','#3fa65c');
+};
 
-        // Анимация заклинания с правильным направлением
-        function animateSpell(spellType, fromLeft) {
-            switch(spellType) {
-                case 'water':
-                    animateWaterSpell(fromLeft);
-                    break;
-                case 'fire':
-                    animateFireSpell(fromLeft);
-                    break;
-                case 'lightning':
-                    animateLightningSpell(fromLeft); // ИЗМЕНЕНО: новая анимация молнии
-                    break;
-                case 'earth':
-                    animateEarthSpell(fromLeft);
-                    break;
-            }
-        }
-
-        // Анимация водяного потока
-        function animateWaterSpell(fromLeft) {
-            const waterWave = document.createElement('div');
-            waterWave.className = 'water-wave';
-            
-            if (fromLeft) {
-                waterWave.style.left = '150px';
-                waterWave.classList.add('left');
-            } else {
-                waterWave.style.right = '150px';
-                waterWave.classList.add('right');
-            }
-            
-            gameAreaEl.appendChild(waterWave);
-            
-            setTimeout(() => {
-                waterWave.remove();
-            }, 1500);
-        }
-
-        // Анимация огненного шара
-        function animateFireSpell(fromLeft) {
-            const fireball = document.createElement('div');
-            fireball.className = 'fireball';
-            
-            if (fromLeft) {
-                fireball.style.left = '150px';
-                fireball.classList.add('left');
-            } else {
-                fireball.style.right = '150px';
-                fireball.classList.add('right');
-            }
-            
-            gameAreaEl.appendChild(fireball);
-            
-            setTimeout(() => {
-                fireball.remove();
-                
-                const explosionX = fromLeft ? gameAreaEl.offsetWidth - 150 : 150;
-                
-                for (let i = 0; i < 12; i++) {
-                    const explosion = document.createElement('div');
-                    explosion.className = 'fire-explosion';
-                    
-                    const targetY = Math.random() * 300 + 50;
-                    
-                    explosion.style.left = `${explosionX}px`;
-                    explosion.style.top = `${targetY}px`;
-                    
-                    const angle = Math.random() * Math.PI * 2;
-                    const distance = 50 + Math.random() * 100;
-                    
-                    gameAreaEl.appendChild(explosion);
-                    
-                    setTimeout(() => {
-                        explosion.style.transform = `translate(${Math.cos(angle) * distance}px, ${Math.sin(angle) * distance}px)`;
-                    }, 10);
-                    
-                    setTimeout(() => {
-                        explosion.remove();
-                    }, 1000);
-                }
-            }, 1000);
-        }
-
-        // ИСПРАВЛЕННАЯ анимация молнии - яркая желто-золото-красная линия
-        function animateLightningSpell(fromLeft) {
-            const lightning = document.createElement('div');
-            lightning.className = 'lightning-bolt';
-            
-            // Добавляем дополнительные эффекты для большей яркости
-            const glow = document.createElement('div');
-            glow.className = 'lightning-bolt';
-            glow.style.filter = 'blur(8px)';
-            glow.style.opacity = '0.5';
-            glow.style.zIndex = '4';
-            
-            if (fromLeft) {
-                lightning.style.left = '150px';
-                lightning.classList.add('left');
-                glow.style.left = '150px';
-                glow.classList.add('left');
-            } else {
-                lightning.style.right = '150px';
-                lightning.classList.add('right');
-                glow.style.right = '150px';
-                glow.classList.add('right');
-            }
-            
-            gameAreaEl.appendChild(glow);
-            gameAreaEl.appendChild(lightning);
-            
-            // Добавляем вспышки в начале и конце молнии
-            setTimeout(() => {
-                const flashStart = document.createElement('div');
-                flashStart.style.position = 'absolute';
-                flashStart.style.width = '40px';
-                flashStart.style.height = '40px';
-                flashStart.style.borderRadius = '50%';
-                flashStart.style.background = 'radial-gradient(circle, rgba(255,255,0,0.8) 0%, rgba(255,255,0,0) 70%)';
-                flashStart.style.boxShadow = '0 0 30px 15px rgba(255,255,0,0.7)';
-                flashStart.style.zIndex = '6';
-                
-                if (fromLeft) {
-                    flashStart.style.left = '140px';
-                    flashStart.style.top = '140px';
-                } else {
-                    flashStart.style.right = '140px';
-                    flashStart.style.top = '140px';
-                }
-                
-                gameAreaEl.appendChild(flashStart);
-                
-                setTimeout(() => {
-                    flashStart.remove();
-                }, 300);
-            }, 100);
-            
-            setTimeout(() => {
-                const flashEnd = document.createElement('div');
-                flashEnd.style.position = 'absolute';
-                flashEnd.style.width = '30px';
-                flashEnd.style.height = '30px';
-                flashEnd.style.borderRadius = '50%';
-                flashEnd.style.background = 'radial-gradient(circle, rgba(255,69,0,0.8) 0%, rgba(255,69,0,0) 70%)';
-                flashEnd.style.boxShadow = '0 0 20px 10px rgba(255,69,0,0.6)';
-                flashEnd.style.zIndex = '6';
-                
-                if (fromLeft) {
-                    flashEnd.style.left = 'calc(100% - 160px)';
-                    flashEnd.style.top = '140px';
-                } else {
-                    flashEnd.style.right = 'calc(100% - 160px)';
-                    flashEnd.style.top = '140px';
-                }
-                
-                gameAreaEl.appendChild(flashEnd);
-                
-                setTimeout(() => {
-                    flashEnd.remove();
-                }, 400);
-            }, 500);
-            
-            setTimeout(() => {
-                lightning.remove();
-                glow.remove();
-            }, 800);
-        }
-
-        // Анимация метеорита
-        function animateEarthSpell(fromLeft) {
-            const meteor = document.createElement('div');
-            meteor.className = 'meteor tail';
-            
-            if (fromLeft) {
-                meteor.classList.add('left');
-            } else {
-                meteor.classList.add('right');
-            }
-            
-            gameAreaEl.appendChild(meteor);
-            
-            setTimeout(() => {
-                meteor.remove();
-            }, 1200);
-        }
-
-        // Показать эффект урона у цели
-        function showDamageEffect(targetPlayer, damage) {
-            const damageEffect = document.createElement('div');
-            damageEffect.className = 'damage-effect';
-            damageEffect.textContent = `-${damage}`;
-            damageEffect.style.color = targetPlayer === 1 ? '#ff4d6d' : '#4d9fff';
-            
-            if (targetPlayer === 1) {
-                damageEffect.style.left = '150px';
-                damageEffect.style.top = '100px';
-            } else {
-                damageEffect.style.left = 'calc(100% - 250px)';
-                damageEffect.style.top = '100px';
-            }
-            
-            gameAreaEl.appendChild(damageEffect);
-            
-            setTimeout(() => {
-                damageEffect.remove();
-            }, 1000);
-        }
-
-        // Показать эффект промаха
-        function showMissEffect() {
-            const missEffect = document.createElement('div');
-            missEffect.className = 'miss-effect';
-            missEffect.textContent = 'ПРОМАХ!';
-            
-            gameAreaEl.appendChild(missEffect);
-            
-            setTimeout(() => {
-                missEffect.remove();
-            }, 1500);
-        }
-
-        // Завершение игры
-        function endGame(winnerName) {
-            gameState.gameActive = false;
-            clearInterval(gameState.timerInterval);
-            
-            winnerTextEl.textContent = `${winnerName} побеждает!`;
-            gameOverEl.style.display = 'block';
-            
-            addLogEntry(`=== ${winnerName} ПОБЕЖДАЕТ В ДУЭЛИ! ===`, "wizard-1-color");
-            addLogEntry("Нажмите 'Начать заново' для новой игры.");
-        }
-
-        // Обновление UI
-        function updateUI() {
-            document.getElementById('wizard1Name').textContent = gameState.wizard1.name;
-            document.getElementById('wizard2Name').textContent = gameState.wizard2.name;
-        }
-
-        // Обработчики событий
-        startBtn.addEventListener('click', startGame);
-        restartBtn.addEventListener('click', initGame);
-
-        pvpModeBtn.addEventListener('click', () => {
-            gameState.gameMode = 'pvp';
-            pvpModeBtn.classList.add('active');
-            pveModeBtn.classList.remove('active');
-            addLogEntry("Режим игры: Игрок против Игрока");
-        });
-
-        pveModeBtn.addEventListener('click', () => {
-            gameState.gameMode = 'pve';
-            pveModeBtn.classList.add('active');
-            pvpModeBtn.classList.remove('active');
-            addLogEntry("Режим игры: Игрок против Компьютера");
-        });
-
-        // Обработчики выбора заклинаний
-        spellWaterBtn.addEventListener('click', () => selectSpell('water'));
-        spellFireBtn.addEventListener('click', () => selectSpell('fire'));
-        spellLightningBtn.addEventListener('click', () => selectSpell('lightning'));
-        spellEarthBtn.addEventListener('click', () => selectSpell('earth'));
-
-        // Обработчик отправки ответа
-        submitBtn.addEventListener('click', checkAnswer);
-        
-        // Обработчик нажатия Enter в поле ввода
-        answerInputEl.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                checkAnswer();
-            }
-        });
-
-        // Инициализация игры при загрузке
-        window.addEventListener('DOMContentLoaded', initGame);
-    </script>
+/* init */
+$('#menuRating').textContent=settings.totalRating;
+</script>
 </body>
 </html>
+```
